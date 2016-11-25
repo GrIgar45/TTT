@@ -2,6 +2,9 @@
 
 namespace tic_tac_toe
 {
+    /// <summary>
+    /// Игрок человек.
+    /// </summary>
     class Human: IPlayer
     {
         TickTackToe gameTTT;
