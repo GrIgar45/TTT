@@ -10,10 +10,10 @@ namespace tic_tac_toe
     class Field
     {
         private const double CLIPPING = 2.5;
-        int canvasSizeX, canvasSizeY, renderX, renderY, rows, cols, сellSize;
+        int canvasSizeX, canvasSizeY, renderX, renderY, rows, cols, cellSize;
         Graphics gField;
         Bitmap imgField;
-        Pen linePen;
+        Pen linePen, winPen;
 
         public Field(int canvasSizeX, int canvasSizeY, int rows, int cols)
         {
@@ -24,6 +24,7 @@ namespace tic_tac_toe
             this.imgField = new Bitmap(canvasSizeX, canvasSizeY);
             this.gField = Graphics.FromImage(imgField);
             linePen = new Pen(Color.Black, 2);
+            winPen = new Pen(Color.Red, 3);
         }
 
         int mathCellSize()
@@ -37,13 +38,13 @@ namespace tic_tac_toe
         /// Определение границ для отрисовки
         /// </summary>
         /// <returns>Ширина отрисовки</returns>
-        int mathRenderX() => cols * сellSize;
+        int mathRenderX() => cols * cellSize;
 
         /// <summary>
         /// Определение границ для отрисовки
         /// </summary>
         /// <returns>Высота отрисовки</returns>
-        int mathRenderY() => rows * сellSize;
+        int mathRenderY() => rows * cellSize;
 
         /// <summary>
         /// Определение границы отрисовки по горизонтали
@@ -64,14 +65,23 @@ namespace tic_tac_toe
         /// </summary>
         /// <param name="X">Координата колонки</param>
         /// <returns>Номер колонки</returns>
-        public int mathColN(int X) => (X - mathLineX()) / сellSize;
+        public int mathColN(int X)
+        {
+            // Из-за окрегления необходимо дополнительно проверять
+            if (X < mathLineX()) return -1;
+            return (X - mathLineX()) / cellSize;
+        }
 
         /// <summary>
         /// Определение номера строки
         /// </summary>
         /// <param name="Y">Координата строки</param>
         /// <returns>Номер строки</returns>
-        public int mathRowN(int Y) => (Y - mathLineY()) / сellSize;
+        public int mathRowN(int Y)
+        {
+            if (Y < mathLineY()) return -1;
+            return (Y - mathLineY()) / cellSize;
+        }
 
         /// <summary>
         /// Отрисовка линий на поле
@@ -79,20 +89,20 @@ namespace tic_tac_toe
         /// <returns>Ссылка на изображения поля</returns>
         public Bitmap DrawFields()
         {
-            сellSize = mathCellSize();
+            cellSize = mathCellSize();
             renderX = mathRenderX();
             renderY = mathRenderY();
             int startLineX = mathLineX();
             int startLineY = mathLineY();
             for (int i = 0; i < cols - 1; i++)
             {
-                startLineX += сellSize;
+                startLineX += cellSize;
                 gField.DrawLine(linePen, startLineX, startLineY, startLineX, startLineY + renderY);
             }
             startLineX = (canvasSizeX - renderX) / 2;
             for (int i = 0; i < rows - 1; i++)
             {
-                startLineY += сellSize;
+                startLineY += cellSize;
                 gField.DrawLine(linePen, startLineX, startLineY, startLineX + renderX, startLineY);
             }
             return imgField;
@@ -101,13 +111,13 @@ namespace tic_tac_toe
         /// <summary>
         /// Отрисовка хода
         /// </summary>
-        /// <param name="X">Координата хода по горизонтали</param>
-        /// <param name="Y">Координата хода по вертикали</param>
+        /// <param name="iY">Координата хода по горизонтали</param>
+        /// <param name="iX">Координата хода по вертикали</param>
         /// <param name="isX">Если истино - будет отрисован кретик</param>
-        public void DrawMove(int X, int Y, bool isX)
+        public void DrawMove(int iY, int iX, bool isX)
         {
-            int centerX = сellSize * mathColN(X) + mathLineX() + сellSize / 2;
-            int centerY = сellSize * mathRowN(Y) + mathLineY() + сellSize / 2;
+            int centerX = cellSize * iX + mathLineX() + cellSize / 2;
+            int centerY = cellSize * iY + mathLineY() + cellSize / 2;
             if (isX) DrawX(centerX, centerY);
             else DrawO(centerX, centerY);
         }
@@ -119,7 +129,7 @@ namespace tic_tac_toe
         /// <param name="centerY">Координата центра по вертикали</param>
         void DrawX(int centerX, int centerY)
         {
-            int halfMin = Convert.ToInt32(сellSize / CLIPPING);
+            int halfMin = Convert.ToInt32(cellSize / CLIPPING);
             gField.DrawLine(linePen, centerX - halfMin, centerY - halfMin, centerX + halfMin, centerY + halfMin);
             gField.DrawLine(linePen, centerX - halfMin, centerY + halfMin, centerX + halfMin, centerY - halfMin);
         }
@@ -131,8 +141,17 @@ namespace tic_tac_toe
         /// <param name="centerY">Координата центра по вертикали</param>
         void DrawO(int centerX, int centerY)
         {
-            int halfMin = Convert.ToInt32(сellSize / CLIPPING);
+            int halfMin = Convert.ToInt32(cellSize / CLIPPING);
             gField.DrawEllipse(linePen, centerX - halfMin, centerY - halfMin, halfMin * 2, halfMin * 2);
+        }
+
+        public void DrawLine(LineToDraw ltd, char line)
+        {
+            int x1 = cellSize * ltd.StartX + mathLineX() + cellSize / 2;
+            int y1 = cellSize * ltd.StartY + mathLineY() + cellSize / 2;
+            int x2 = cellSize * ltd.EndX + mathLineX() + cellSize / 2;
+            int y2 = cellSize * ltd.EndY + mathLineY() + cellSize / 2;
+            gField.DrawLine(winPen, x1, y1, x2, y2);
         }
     }
 }

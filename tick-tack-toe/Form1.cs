@@ -18,10 +18,11 @@ namespace tic_tac_toe
         /// </summary>
         private void button1_Click(object sender, EventArgs e)
         {
-            TickTackToe TTT = new TickTackToe(fildPaper.Width, fildPaper.Height, (int)rows.Value, (int)cols.Value);
+            TickTackToe TTT = new TickTackToe(fildPaper.Width, fildPaper.Height, (int)rows.Value, (int)cols.Value, 3, this);
             first = new Human(TTT, Mark.X);
             second = new Human(TTT, Mark.O);
             current = first;
+            fildPaper.Enabled = true;
             fildPaper.Image = TTT.DrawField();
         }
 
@@ -46,7 +47,7 @@ namespace tic_tac_toe
         /// </summary>
         private void fildPaper_MouseClick(object sender, MouseEventArgs e)
         {
-            if (current == null) return; 
+            if (current == null) return;
             Human pl = current as Human;
             if (!pl.TakeMove(e.X, e.Y)) return;
             current = (current == first) ? second : first;
@@ -83,6 +84,12 @@ namespace tic_tac_toe
         private void cells_ValueChanged(object sender, EventArgs e)
         {
             rule3.Checked = true;
+        }
+
+        public void NotifyWinner(string winner)
+        {
+            MessageBox.Show($"Победитель :{winner}");
+            fildPaper.Enabled = false;
         }
     }
 }
