@@ -9,12 +9,21 @@ namespace tic_tac_toe
     /// </summary>
     class Field
     {
+        // Для уменьшения размера метки
         private const double CLIPPING = 2.5;
         int canvasSizeX, canvasSizeY, renderX, renderY, rows, cols, cellSize;
         Graphics gField;
         Bitmap imgField;
+        // Кисти для линий
         Pen linePen, winPen;
 
+        /// <summary>
+        /// Генерирует начальные настройки поля
+        /// </summary>
+        /// <param name="canvasSizeX">Размер полотна по горизонтали</param>
+        /// <param name="canvasSizeY">Размер полотна по веритикали</param>
+        /// <param name="rows">Количество строк</param>
+        /// <param name="cols">Количество столбцов</param>
         public Field(int canvasSizeX, int canvasSizeY, int rows, int cols)
         {
             this.canvasSizeX = canvasSizeX;
@@ -27,6 +36,10 @@ namespace tic_tac_toe
             winPen = new Pen(Color.Red, 3);
         }
 
+        /// <summary>
+        /// Вычисление минимально необходимого размера ячейки
+        /// </summary>
+        /// <returns></returns>
         int mathCellSize()
         {
             int cellWidth = canvasSizeX / cols;
@@ -145,12 +158,44 @@ namespace tic_tac_toe
             gField.DrawEllipse(linePen, centerX - halfMin, centerY - halfMin, halfMin * 2, halfMin * 2);
         }
 
+        /// <summary>
+        /// Зачеркивание выиграшной комбинации
+        /// </summary>
+        /// <param name="ltd">Координаты комбинации</param>
+        /// <param name="line">Ориентация линии</param>
         public void DrawLine(LineToDraw ltd, char line)
         {
+            //int x1 = cellSize * ltd.StartX + mathLineX() + cellSize / 2;
+            //int y1 = cellSize * ltd.StartY + mathLineY() + cellSize / 2;
+            //int x2 = cellSize * ltd.EndX + mathLineX() + cellSize / 2;
+            //int y2 = cellSize * ltd.EndY + mathLineY() + cellSize / 2;
             int x1 = cellSize * ltd.StartX + mathLineX() + cellSize / 2;
             int y1 = cellSize * ltd.StartY + mathLineY() + cellSize / 2;
             int x2 = cellSize * ltd.EndX + mathLineX() + cellSize / 2;
             int y2 = cellSize * ltd.EndY + mathLineY() + cellSize / 2;
+            switch (line)
+            {
+                case '|':
+                    y1 -= cellSize / 2;
+                    y2 += cellSize / 2;
+                    break;
+                case '-':
+                    x1 -= cellSize / 2;
+                    x2 += cellSize / 2;
+                    break;
+                case '\\':
+                    x1 -= cellSize / 2;
+                    y1 -= cellSize / 2;
+                    x2 += cellSize / 2;
+                    y2 += cellSize / 2;
+                    break;
+                case '/':
+                    x1 -= cellSize / 2;
+                    y1 += cellSize / 2;
+                    x2 += cellSize / 2;
+                    y2 -= cellSize / 2;
+                    break;
+            }
             gField.DrawLine(winPen, x1, y1, x2, y2);
         }
     }

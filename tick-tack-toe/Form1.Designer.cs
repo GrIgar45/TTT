@@ -139,6 +139,7 @@
             this.rule3.TabStop = true;
             this.rule3.Text = "Три в ряд";
             this.rule3.UseVisualStyleBackColor = true;
+            this.rule3.CheckedChanged += new System.EventHandler(this.rule3_CheckedChanged);
             // 
             // groupBoxEnemy
             // 
@@ -192,6 +193,7 @@
             // radioEasy
             // 
             this.radioEasy.AutoSize = true;
+            this.radioEasy.Checked = true;
             this.radioEasy.Location = new System.Drawing.Point(3, 3);
             this.radioEasy.Name = "radioEasy";
             this.radioEasy.Size = new System.Drawing.Size(62, 17);
@@ -205,9 +207,9 @@
             this.radioBot.AutoSize = true;
             this.radioBot.Location = new System.Drawing.Point(100, 19);
             this.radioBot.Name = "radioBot";
-            this.radioBot.Size = new System.Drawing.Size(48, 17);
+            this.radioBot.Size = new System.Drawing.Size(77, 17);
             this.radioBot.TabIndex = 1;
-            this.radioBot.Text = "ЭВМ";
+            this.radioBot.Text = "Компютер";
             this.radioBot.UseVisualStyleBackColor = true;
             this.radioBot.CheckedChanged += new System.EventHandler(this.radioBot_CheckedChanged);
             // 
@@ -287,6 +289,7 @@
             this.fildPaper.BackColor = System.Drawing.Color.White;
             this.fildPaper.Cursor = System.Windows.Forms.Cursors.Cross;
             this.fildPaper.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fildPaper.Enabled = false;
             this.fildPaper.Location = new System.Drawing.Point(0, 0);
             this.fildPaper.Name = "fildPaper";
             this.fildPaper.Size = new System.Drawing.Size(480, 260);

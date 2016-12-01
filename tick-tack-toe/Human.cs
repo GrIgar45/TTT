@@ -5,19 +5,18 @@ namespace tic_tac_toe
     /// <summary>
     /// Игрок человек.
     /// </summary>
-    class Human: IPlayer
+    class Human : Player
     {
-        TickTackToe gameTTT;
-        readonly Mark mark;
-        public Human(TickTackToe TTT, Mark m)
-        {
-            gameTTT = TTT;
-            mark = m;
-        }
-
+        public Human(TickTackToe TTT, Mark m) : base(TTT, m) { }
+        /// <summary>
+        /// Ход игрока
+        /// </summary>
+        /// <param name="X">Х координата</param>
+        /// <param name="Y">У координата</param>
+        /// <returns>Если истино - действие совершено</returns>
         public bool TakeMove(int X, int Y)
         {
-            return gameTTT.MakeMove(X, Y, mark);
+            return gameTTT.MakeMoveCoordinate(X, Y, mark);
         }
     }
 }

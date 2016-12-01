@@ -6,8 +6,12 @@ namespace tic_tac_toe
 {
     public partial class Form1 : Form
     {
-        // Игроки. В будущем будут ботами.
-        IPlayer current, first, second;
+        // Игроки.
+        Player current, first, second;
+        // Если кто то выиграл - боту уже ходить не нужно
+        bool gameIsContinue;
+        int lineToWin = 3;
+
         public Form1()
         {
             InitializeComponent();
@@ -18,12 +22,20 @@ namespace tic_tac_toe
         /// </summary>
         private void button1_Click(object sender, EventArgs e)
         {
-            TickTackToe TTT = new TickTackToe(fildPaper.Width, fildPaper.Height, (int)rows.Value, (int)cols.Value, 3, this);
+            // Новая игра
+            TickTackToe TTT = new TickTackToe(fildPaper.Width, fildPaper.Height, (int)rows.Value, (int)cols.Value, lineToWin, this);
+            // Новые игроки
             first = new Human(TTT, Mark.X);
-            second = new Human(TTT, Mark.O);
+            if (radioBot.Checked)
+                second = new BotEasy(TTT, Mark.O);
+            else
+                second = new Human(TTT, Mark.O);
+            // Крестики всегда первыми
             current = first;
+            // Возможность ходить и отрисовка поля
             fildPaper.Enabled = true;
             fildPaper.Image = TTT.DrawField();
+            gameIsContinue = true;
         }
 
         /// <summary>
@@ -47,11 +59,26 @@ namespace tic_tac_toe
         /// </summary>
         private void fildPaper_MouseClick(object sender, MouseEventArgs e)
         {
-            if (current == null) return;
             Human pl = current as Human;
             if (!pl.TakeMove(e.X, e.Y)) return;
+
+            if (second is IBot && gameIsContinue)
+            {
+                var sc = second as IBot;
+                sc.TakeMove();
+                fildPaper.Refresh();
+                return;
+            }
             current = (current == first) ? second : first;
             fildPaper.Refresh();
+        }
+
+        /// <summary>
+        /// Выбор правила 3 в ряд
+        /// </summary>
+        private void rule3_CheckedChanged(object sender, EventArgs e)
+        {
+            lineToWin = 3;
         }
 
         /// <summary>
@@ -64,6 +91,7 @@ namespace tic_tac_toe
                 rule3.Checked = true;
                 return;
             }
+            lineToWin = 4;
         }
 
         /// <summary>
@@ -76,10 +104,12 @@ namespace tic_tac_toe
                 rule3.Checked = true;
                 return;
             }
+            lineToWin = 5;
         }
 
         /// <summary>
         /// Изменение размера поля
+        /// По нормальному, ссылку на этот метод нужно передать как делегат
         /// </summary>
         private void cells_ValueChanged(object sender, EventArgs e)
         {
@@ -89,6 +119,7 @@ namespace tic_tac_toe
         public void NotifyWinner(string winner)
         {
             MessageBox.Show($"Победитель :{winner}");
+            gameIsContinue = false;
             fildPaper.Enabled = false;
         }
     }
