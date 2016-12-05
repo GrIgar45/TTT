@@ -15,7 +15,7 @@ namespace tic_tac_toe
         Graphics gField;
         Bitmap imgField;
         // Кисти для линий
-        Pen linePen, winPen;
+        Pen linePen, xPen, oPen;
 
         /// <summary>
         /// Генерирует начальные настройки поля
@@ -33,7 +33,8 @@ namespace tic_tac_toe
             this.imgField = new Bitmap(canvasSizeX, canvasSizeY);
             this.gField = Graphics.FromImage(imgField);
             linePen = new Pen(Color.Black, 2);
-            winPen = new Pen(Color.Red, 3);
+            xPen = new Pen(Color.Red, 3);
+            oPen = new Pen(Color.Blue, 3);
         }
 
         /// <summary>
@@ -143,8 +144,8 @@ namespace tic_tac_toe
         void DrawX(int centerX, int centerY)
         {
             int halfMin = Convert.ToInt32(cellSize / CLIPPING);
-            gField.DrawLine(linePen, centerX - halfMin, centerY - halfMin, centerX + halfMin, centerY + halfMin);
-            gField.DrawLine(linePen, centerX - halfMin, centerY + halfMin, centerX + halfMin, centerY - halfMin);
+            gField.DrawLine(xPen, centerX - halfMin, centerY - halfMin, centerX + halfMin, centerY + halfMin);
+            gField.DrawLine(xPen, centerX - halfMin, centerY + halfMin, centerX + halfMin, centerY - halfMin);
         }
 
         /// <summary>
@@ -155,7 +156,7 @@ namespace tic_tac_toe
         void DrawO(int centerX, int centerY)
         {
             int halfMin = Convert.ToInt32(cellSize / CLIPPING);
-            gField.DrawEllipse(linePen, centerX - halfMin, centerY - halfMin, halfMin * 2, halfMin * 2);
+            gField.DrawEllipse(oPen, centerX - halfMin, centerY - halfMin, halfMin * 2, halfMin * 2);
         }
 
         /// <summary>
@@ -165,10 +166,6 @@ namespace tic_tac_toe
         /// <param name="line">Ориентация линии</param>
         public void DrawLine(LineToDraw ltd, char line)
         {
-            //int x1 = cellSize * ltd.StartX + mathLineX() + cellSize / 2;
-            //int y1 = cellSize * ltd.StartY + mathLineY() + cellSize / 2;
-            //int x2 = cellSize * ltd.EndX + mathLineX() + cellSize / 2;
-            //int y2 = cellSize * ltd.EndY + mathLineY() + cellSize / 2;
             int x1 = cellSize * ltd.StartX + mathLineX() + cellSize / 2;
             int y1 = cellSize * ltd.StartY + mathLineY() + cellSize / 2;
             int x2 = cellSize * ltd.EndX + mathLineX() + cellSize / 2;
@@ -196,7 +193,7 @@ namespace tic_tac_toe
                     y2 -= cellSize / 2;
                     break;
             }
-            gField.DrawLine(winPen, x1, y1, x2, y2);
+            gField.DrawLine(linePen, x1, y1, x2, y2);
         }
     }
 }

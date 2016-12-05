@@ -19,7 +19,11 @@ namespace tic_tac_toe
             }
         }
 
-        List<Point> FindPointsToMove()
+        /// <summary>
+        /// Поиск возможных ячеек для хода
+        /// </summary>
+        /// <returns>Список возможный ходов</returns>
+        protected List<Point> FindPointsToMove()
         {
             var al = new List<Point>();
             var lp = gameTTT.LastMove;

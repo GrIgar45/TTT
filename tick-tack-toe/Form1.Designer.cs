@@ -112,7 +112,6 @@
             this.rule5.Name = "rule5";
             this.rule5.Size = new System.Drawing.Size(80, 17);
             this.rule5.TabIndex = 0;
-            this.rule5.TabStop = true;
             this.rule5.Text = "Пять в ряд";
             this.rule5.UseVisualStyleBackColor = true;
             this.rule5.CheckedChanged += new System.EventHandler(this.rule5_CheckedChanged);
@@ -124,7 +123,6 @@
             this.rule4.Name = "rule4";
             this.rule4.Size = new System.Drawing.Size(94, 17);
             this.rule4.TabIndex = 0;
-            this.rule4.TabStop = true;
             this.rule4.Text = "Четыре в ряд";
             this.rule4.UseVisualStyleBackColor = true;
             this.rule4.CheckedChanged += new System.EventHandler(this.rule4_CheckedChanged);
@@ -132,6 +130,7 @@
             // rule3
             // 
             this.rule3.AutoSize = true;
+            this.rule3.Checked = true;
             this.rule3.Location = new System.Drawing.Point(19, 19);
             this.rule3.Name = "rule3";
             this.rule3.Size = new System.Drawing.Size(74, 17);

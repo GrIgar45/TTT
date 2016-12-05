@@ -16,18 +16,27 @@ namespace tic_tac_toe
         Form1 form;
         // Хранение информации о проделаный ходах.
         Mark[,] cells;
-        // Размер поля и условие беды.
+        // Размер поля и условие победы.
         readonly int cols, rows, lineToWin;
         // Игровое поле.
         Field myField;
         Point lastMove;
 
+        int countOfSteps = 0;
+
         public Point LastMove { get { return lastMove; } }
 
         public int LineToWin { get { return lineToWin; } }
+
         public int Cols { get { return cols; } }
         public int Rows { get { return rows; } }
 
+        /// <summary>
+        /// Доступ к информации игрового поля
+        /// </summary>
+        /// <param name="iY">Индекс строки</param>
+        /// <param name="iX">Индекс столбца</param>
+        /// <returns>Отметку в ячейке</returns>
         public Mark this[int iY, int iX]
         {
             get
@@ -84,28 +93,54 @@ namespace tic_tac_toe
             return MakeMove(iY, iX, mark);
         }
 
+        /// <summary>
+        /// Совершение хода на поле
+        /// </summary>
+        /// <param name="iY">Индекс строки</param>
+        /// <param name="iX">Индекс столбца</param>
+        /// <param name="mark">Отметка</param>
+        /// <returns>Если истинно - ход совершен</returns>
         public bool MakeMove(int iY, int iX, Mark mark)
         {
             cells[iY, iX] = mark;
             myField.DrawMove(iY, iX, mark == Mark.X);
-            CheckTheWinner(iY, iX, mark);
+            if (CheckTheWinner(iY, iX, mark))
+                return true;
+            if (++countOfSteps == rows * cols)
+                form.GameOver("Ничья");
             lastMove.Y = iY; lastMove.X = iX;
             return true;
         }
 
-        void CheckTheWinner(int iY, int iX, Mark mark)
+        /// <summary>
+        /// Проверка на завершение игры
+        /// </summary>
+        /// <param name="iY">Индекс строки</param>
+        /// <param name="iX">Индекс столбца</param>
+        /// <param name="mark">Отметка</param>
+        /// <returns>Если истинно - один из игроков победил</returns>
+        bool CheckTheWinner(int iY, int iX, Mark mark)
         {
             LineToDraw ltd;
             char c = CheckStaightLine(iY, iX, mark, out ltd);
             if (c == ' ')
                 c = CheckObliqueLine(iY, iX, mark, ref ltd);
             if (c == ' ')
-                return;
+                return false;
             myField.DrawLine(ltd, c);
             string winner = mark == Mark.X ? "Крестики" : "Нолики";
-            form.NotifyWinner(winner);
+            form.GameOver(winner);
+            return true;
         }
 
+        /// <summary>
+        /// Проверка всех выиграшных возможностей
+        /// </summary>
+        /// <param name="iY">Индекс строки</param>
+        /// <param name="iX">Индекс столбца</param>
+        /// <param name="mark">Отметка</param>
+        /// <param name="ltd">Линия для отрисовки</param>
+        /// <returns>Возвращает символ, для отрисовки линии</returns>
         char CheckStaightLine(int iY, int iX, Mark mark, out LineToDraw ltd)
         {
             ltd = new LineToDraw(iY, iX, iY, iX);
@@ -170,6 +205,14 @@ namespace tic_tac_toe
             return ' ';
         }
 
+        /// <summary>
+        /// Проверка всех выиграшных возможностей
+        /// </summary>
+        /// <param name="iY">Индекс строки</param>
+        /// <param name="iX">Индекс столбца</param>
+        /// <param name="mark">Отметка</param>
+        /// <param name="ltd">Линия для отрисовки</param>
+        /// <returns>Возвращает символ, для отрисовки линии</returns>
         char CheckObliqueLine(int iY, int iX, Mark mark, ref LineToDraw ltd)
         {
             ltd.SetStart(iY, iX);

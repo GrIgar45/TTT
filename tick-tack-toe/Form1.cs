@@ -9,9 +9,9 @@ namespace tic_tac_toe
         // Игроки.
         Player current, first, second;
         // Если кто то выиграл - боту уже ходить не нужно
-        bool gameIsContinue;
+        bool gameIsFinish;
         int lineToWin = 3;
-
+        string winner;
         public Form1()
         {
             InitializeComponent();
@@ -27,7 +27,12 @@ namespace tic_tac_toe
             // Новые игроки
             first = new Human(TTT, Mark.X);
             if (radioBot.Checked)
-                second = new BotEasy(TTT, Mark.O);
+            {
+                if (radioEasy.Checked)
+                    second = new BotEasy(TTT, Mark.O);
+                else
+                    second = new BotHard(TTT, Mark.O);
+            }
             else
                 second = new Human(TTT, Mark.O);
             // Крестики всегда первыми
@@ -35,7 +40,7 @@ namespace tic_tac_toe
             // Возможность ходить и отрисовка поля
             fildPaper.Enabled = true;
             fildPaper.Image = TTT.DrawField();
-            gameIsContinue = true;
+            gameIsFinish = false;
         }
 
         /// <summary>
@@ -62,7 +67,7 @@ namespace tic_tac_toe
             Human pl = current as Human;
             if (!pl.TakeMove(e.X, e.Y)) return;
 
-            if (second is IBot && gameIsContinue)
+            if (second is IBot && !gameIsFinish)
             {
                 var sc = second as IBot;
                 sc.TakeMove();
@@ -71,6 +76,10 @@ namespace tic_tac_toe
             }
             current = (current == first) ? second : first;
             fildPaper.Refresh();
+            if (gameIsFinish)
+            {
+                MessageBox.Show($"Победитель: {winner}");
+            }
         }
 
         /// <summary>
@@ -116,10 +125,14 @@ namespace tic_tac_toe
             rule3.Checked = true;
         }
 
-        public void NotifyWinner(string winner)
+        /// <summary>
+        /// Оповещение о завершении игры
+        /// </summary>
+        /// <param name="winner">Победитель</param>
+        public void GameOver(string winner)
         {
-            MessageBox.Show($"Победитель :{winner}");
-            gameIsContinue = false;
+            this.winner = winner;
+            gameIsFinish = true;
             fildPaper.Enabled = false;
         }
     }
