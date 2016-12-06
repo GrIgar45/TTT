@@ -8,6 +8,7 @@ namespace tic_tac_toe
     {
         public BotEasy(TickTackToe TTT, Mark m) : base(TTT, m) { }
 
+        // Производит поиск случайной пустой ячейки и ходит в нее
         public void TakeMove()
         {
             var al = FindPointsToMove();

@@ -13,21 +13,24 @@ namespace tic_tac_toe
     /// </summary>
     class TickTackToe
     {
+        // Делегат на функцию оповещения о завершении игры в главной форме
         Form1 form;
+        // Матрица. Тип - Mark (все возможные состояния матрицы)
         // Хранение информации о проделаный ходах.
         Mark[,] cells;
-        // Размер поля и условие победы.
+        // Размер поля (столбцов и строк) и условие победы (сколько в ряд). Целочисленное.
         readonly int cols, rows, lineToWin;
-        // Игровое поле.
+        // Объект отрисовки хода биты.
         Field myField;
+        // Хранение координат последнего совершеного хода - доступ через свойство
         Point lastMove;
-
+        // Кол-во проделанных ходов - для определения ничьей
         int countOfSteps = 0;
-
+        // Свойство доступа к коодинатам. Только для чтения.
         public Point LastMove { get { return lastMove; } }
-
+        // Свойство доступа к числу маркеров подряд для победы. Только для чтения.
         public int LineToWin { get { return lineToWin; } }
-
+        // Свойства доступа к кол-ву строк и столбцов
         public int Cols { get { return cols; } }
         public int Rows { get { return rows; } }
 
@@ -55,7 +58,7 @@ namespace tic_tac_toe
         /// <param name="canvasSizeX">Размер холста для рисования по горизонтали</param>
         /// <param name="canvasSizeY">Размер холста для рисования по вертикали</param>
         /// <param name="rows">Количество строк</param>
-        /// <param name="cols">Количество стлбцов</param>
+        /// <param name="cols">Количество столбцов</param>
         public TickTackToe(int canvasSizeX, int canvasSizeY, int rows, int cols, int lineToWin, Form1 f)
         {
             form = f;

@@ -8,16 +8,27 @@ namespace tic_tac_toe
 {
     class BotHard : BotEasy, IBot
     {
-
+        // Описывает веса хода в ячейках
+        // Насколько важно походить в эту ячейку
         struct cell
         {
+            // Вес защиты
             public int Def { get; set; }
+            // Вес атаки
             public int Atc { get; set; }
         }
 
+        // Матрица весов ячеек
         cell[,] cells;
+
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="TTT">Обект игры</param>
+        /// <param name="m">Отметка</param>
         public BotHard(TickTackToe TTT, Mark m) : base(TTT, m) { cells = new cell[gameTTT.Rows, gameTTT.Cols]; }
 
+        // Перерасчет весов. И ход в найболее весомую из них
         public void TakeMove()
         {
             countedAroundCell();
@@ -54,7 +65,7 @@ namespace tic_tac_toe
                 }
             }
             // Лучше защитится или атаковать?
-            else if (maxD >= maxA)
+            else if (maxD > maxA)
             {
                 gameTTT.MakeMove(mYD, mXD, mark);
             }
@@ -130,13 +141,13 @@ namespace tic_tac_toe
             {
                 if (gameTTT[Y + i, X + j] == m)
                     n++;
-                else if (gameTTT[Y + i, X + j] != Mark.Empty)
+                else if (gameTTT[Y + i, X + j] == Mark.Empty || gameTTT[Y + i, X + j] == Mark.NULL)
+                    break;
+                else
                 {
                     n = -1;
                     break;
                 }
-                else
-                    break;
                 i += shiftY; j += shiftX;
                 c++;
             }

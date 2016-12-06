@@ -11,14 +11,18 @@ namespace tic_tac_toe
     {
         // Для уменьшения размера метки
         private const double CLIPPING = 2.5;
+        // Целочисленные поля класса - размер холста, размер части холста для отрисовки
+        // Кол-во строк столбцов, минимальный размер ячейки
         int canvasSizeX, canvasSizeY, renderX, renderY, rows, cols, cellSize;
+        // Объект для рисования на холсте (изображении)
         Graphics gField;
+        // Холст поля, илюстрирует ход игры
         Bitmap imgField;
-        // Кисти для линий
+        // Кисти для общих линий и отрисовки отметок
         Pen linePen, xPen, oPen;
 
         /// <summary>
-        /// Генерирует начальные настройки поля
+        /// Конструктор. Генерирует начальные настройки поля
         /// </summary>
         /// <param name="canvasSizeX">Размер полотна по горизонтали</param>
         /// <param name="canvasSizeY">Размер полотна по веритикали</param>
@@ -40,7 +44,7 @@ namespace tic_tac_toe
         /// <summary>
         /// Вычисление минимально необходимого размера ячейки
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Минимальный размер ячейки</returns>
         int mathCellSize()
         {
             int cellWidth = canvasSizeX / cols;
